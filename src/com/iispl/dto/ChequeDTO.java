@@ -10,4 +10,6 @@ public interface ChequeDTO {
 
     void updateChequeStatus(Cheque cheque);
 
+	void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList);
+
 }

@@ -1,18 +1,16 @@
 package com.iispl.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.iispl.dto.ChequeDTO;
 import com.iispl.dto.ChequedtoIMPL;
+import com.iispl.enums.ChequePriority;
 import com.iispl.enums.ChequeStatus;
 import com.iispl.enums.ChequeValidationEnum;
 import com.iispl.model.Cheque;
-import com.iispl.validations.AccountNumberValidation;
-import com.iispl.validations.ChequeAmountValidation;
-
 import com.iispl.validations.ChequeNumberValidation;
-import com.iispl.validations.PresentedDateValidation;
 import com.iispl.validations.ValidationRule;
 
 public class ChequeServiceImpl implements ChequeService {
@@ -61,10 +59,16 @@ public class ChequeServiceImpl implements ChequeService {
                     break;
                 }
             }
-
+            
             if (valid) {
-
+            	if(cheque.getChequeAmount().compareTo(new BigDecimal("200000")) > 0) {
+            		cheque.setPriority(ChequePriority.HIGH);	
+            	}
+            	
+            else {
                 cheque.setStatus(ChequeStatus.ACCEPTED);
+            }
+                
                 chequeDTO.updateChequeStatus(cheque);
 
                 eligibleChequeList.add(cheque);
@@ -81,4 +85,10 @@ public class ChequeServiceImpl implements ChequeService {
             System.out.println(cheque);
         }
     }
+
+	@Override
+	public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
+		 chequeDTO.sortByChequeByPresentingBankAndAmount(chequeList);
+		
+	}
 }

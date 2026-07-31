@@ -2,6 +2,8 @@ package com.iispl.main;
 
 import java.util.Scanner;
 
+import com.iispl.dto.ChequeDTO;
+import com.iispl.dto.ChequedtoIMPL;
 import com.iispl.services.ChequeService;
 import com.iispl.services.ChequeServiceImpl;
 
@@ -12,6 +14,7 @@ public class CheckProceesingSystemMain {
         Scanner scanner = new Scanner(System.in);
 
         ChequeService chequeService = new ChequeServiceImpl();
+        ChequeDTO chequeDto = new ChequedtoIMPL();
 
         while (true) {
 
@@ -19,7 +22,8 @@ public class CheckProceesingSystemMain {
             System.out.println("1. Display All Cheques");
             System.out.println("2. Process All Cheques");
             System.out.println("3. Display Eligible Cheques");
-            System.out.println("4. Exit");
+            System.out.println("6. Sort by Presenting Bank and Amount");
+            System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
 
             int choice = scanner.nextInt();
@@ -37,8 +41,16 @@ public class CheckProceesingSystemMain {
             case 3:
                 chequeService.displayEligibleCheques();
                 break;
+                
+                
+                
+                
+                
+            case 6: 
+            	chequeService.sortByChequeByPresentingBankAndAmount(chequeDto.getAllCheques());
+                break;
 
-            case 4:
+            case 9:
                 System.out.println("Thank You...");
                 scanner.close();
                 System.exit(0);
