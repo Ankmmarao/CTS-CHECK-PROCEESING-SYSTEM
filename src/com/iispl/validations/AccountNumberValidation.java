@@ -13,10 +13,10 @@ public class AccountNumberValidation implements ValidationRule {
 	        }
 
 	        if (Integer.parseInt(cheque.getAccountNumber()) > 0) {
-	            return ChequeValidationEnum.VALIDATION_SUCCESS;
+	            return ChequeValidationEnum.INVALID_ACCOUNT_NUMBER;
 	        }
 
-	        return ChequeValidationEnum.INVALID_ACCOUNT_NUMBER;
+	        return ChequeValidationEnum.VALIDATION_SUCCESS;
 	    }
 
 }
