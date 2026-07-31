@@ -11,11 +11,6 @@ public class AccountNumberValidation implements ValidationRule {
 	        if (cheque.getAccountNumber() == null || cheque.getAccountNumber().trim().isEmpty()) {
 	            return ChequeValidationEnum.INVALID_ACCOUNT_NUMBER;
 	        }
-
-	        if (Integer.parseInt(cheque.getAccountNumber()) > 0) {
-	            return ChequeValidationEnum.INVALID_ACCOUNT_NUMBER;
-	        }
-
 	        return ChequeValidationEnum.VALIDATION_SUCCESS;
 	    }
 
