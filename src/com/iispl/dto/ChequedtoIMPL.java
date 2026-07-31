@@ -102,4 +102,32 @@ public class ChequedtoIMPL implements ChequeDTO {
 		            cheque.getStatus())
 		);
 	}
+
+	@Override
+	public void sortChequeByDate(List<Cheque> chequeList) {
+
+	    chequeList.sort((c1, c2) ->
+	            c1.getChequeDate().compareTo(c2.getChequeDate()));
+	    chequeList.forEach(System.out::println);
+	}
+
+	@Override
+	public void displayHighValuedCheques(List<Cheque> cheques) {
+		cheques.forEach(cheque ->{
+			if(cheque.getPriority() == ChequePriority.HIGH) {
+				 System.out.println(
+						 	"ChequeNumber:"+cheque.getChequeNumber()+"\n"+
+				    		 "Account number:"+cheque.getAccountNumber()+"\n"+
+				    		 "Drawer name:"+cheque.getDrawerName()+"\n"+
+				    		 "PresentingBank:"+cheque.getPresentingBank()+"\n"+
+				    		 "Cheque Amount:"+cheque.getChequeAmount()+"\n"+
+				    		 "Cheque Date:"+cheque.getChequeDate()+"\n"+
+				    		 "Presented Date:"+cheque.getPresentedDate()+"\n"+
+				    		 "Priority:"+cheque.getPriority()+"\n"+
+				    		 "Status:"+cheque.getStatus());
+				 System.out.println();
+			}
+		});
+		
+	}
 }

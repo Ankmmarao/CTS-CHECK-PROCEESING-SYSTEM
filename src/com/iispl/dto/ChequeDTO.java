@@ -12,4 +12,8 @@ public interface ChequeDTO {
 
 	void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList);
 
+	void sortChequeByDate(List<Cheque> cheques);
+
+	void displayHighValuedCheques(List<Cheque> cheques);
+
 }
