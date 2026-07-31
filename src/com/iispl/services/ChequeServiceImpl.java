@@ -1,10 +1,12 @@
 package com.iispl.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.iispl.dto.ChequeDTO;
 import com.iispl.dto.ChequedtoIMPL;
+import com.iispl.enums.ChequePriority;
 import com.iispl.enums.ChequeStatus;
 import com.iispl.enums.ChequeValidationEnum;
 import com.iispl.model.Cheque;
@@ -57,10 +59,16 @@ public class ChequeServiceImpl implements ChequeService {
                     break;
                 }
             }
-
+            
             if (valid) {
-
+            	if(cheque.getChequeAmount().compareTo(new BigDecimal("200000")) > 0) {
+            		cheque.setPriority(ChequePriority.HIGH);	
+            	}
+            	
+            else {
                 cheque.setStatus(ChequeStatus.ACCEPTED);
+            }
+                
                 chequeDTO.updateChequeStatus(cheque);
 
                 eligibleChequeList.add(cheque);
