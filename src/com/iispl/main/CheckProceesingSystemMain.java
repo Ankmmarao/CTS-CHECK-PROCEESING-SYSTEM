@@ -23,6 +23,8 @@ public class CheckProceesingSystemMain {
             System.out.println("2. Process All Cheques");
             System.out.println("3. Display Eligible Cheques");
             System.out.println("6. Sort by Presenting Bank and Amount");
+            System.out.println("7. Sort cheques by cheque_date");
+            System.out.println("8. Display High Valued Cheques");
             System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
 
@@ -49,7 +51,13 @@ public class CheckProceesingSystemMain {
             case 6: 
             	chequeService.sortByChequeByPresentingBankAndAmount(chequeDto.getAllCheques());
                 break;
-
+                
+            case 7:
+            	chequeService.sortChequeByDate(chequeDto.getAllCheques());
+            	break;
+            case 8:
+            	chequeService.displayHighValuedCheques(chequeDto.getAllCheques());
+            	break;
             case 9:
                 System.out.println("Thank You...");
                 scanner.close();

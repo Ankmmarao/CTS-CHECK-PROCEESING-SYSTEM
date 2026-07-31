@@ -91,4 +91,16 @@ public class ChequeServiceImpl implements ChequeService {
 		 chequeDTO.sortByChequeByPresentingBankAndAmount(chequeList);
 		
 	}
+
+	@Override
+	public void sortChequeByDate(List<Cheque> cheques) {
+		chequeDTO.sortChequeByDate(cheques);
+		
+	}
+
+	@Override
+	public void displayHighValuedCheques(List<Cheque> cheques) {
+		chequeDTO.displayHighValuedCheques(cheques);
+		
+	}
 }

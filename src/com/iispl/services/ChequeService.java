@@ -14,4 +14,8 @@ public interface ChequeService {
 
     void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList);
 
+	void sortChequeByDate(List<Cheque> allCheques);
+
+	void displayHighValuedCheques(List<Cheque> allCheques);
+
 }

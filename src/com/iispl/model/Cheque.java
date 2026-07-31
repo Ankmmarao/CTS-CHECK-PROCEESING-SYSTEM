@@ -117,7 +117,7 @@ public class Cheque {
 
     @Override
     public String toString() {
-        return "Cheque [chequeNumber=" + chequeNumber
+        return "Cheque [chequeNumber= " + chequeNumber
                 + ", accountNumber=" + accountNumber
                 + ", drawerName=" + drawerName
                 + ", presentingBank=" + presentingBank
