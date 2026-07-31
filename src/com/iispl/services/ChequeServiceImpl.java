@@ -8,11 +8,7 @@ import com.iispl.dto.ChequedtoIMPL;
 import com.iispl.enums.ChequeStatus;
 import com.iispl.enums.ChequeValidationEnum;
 import com.iispl.model.Cheque;
-import com.iispl.validations.AccountNumberValidation;
-import com.iispl.validations.ChequeAmountValidation;
-
 import com.iispl.validations.ChequeNumberValidation;
-import com.iispl.validations.PresentedDateValidation;
 import com.iispl.validations.ValidationRule;
 
 public class ChequeServiceImpl implements ChequeService {
@@ -81,4 +77,10 @@ public class ChequeServiceImpl implements ChequeService {
             System.out.println(cheque);
         }
     }
+
+	@Override
+	public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
+		 chequeDTO.sortByChequeByPresentingBankAndAmount(chequeList);
+		
+	}
 }
