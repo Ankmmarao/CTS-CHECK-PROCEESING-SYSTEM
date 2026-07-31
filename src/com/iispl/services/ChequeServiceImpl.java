@@ -1,0 +1,84 @@
+package com.iispl.services;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.iispl.dto.ChequeDTO;
+import com.iispl.dto.ChequedtoIMPL;
+import com.iispl.enums.ChequeStatus;
+import com.iispl.enums.ChequeValidationEnum;
+import com.iispl.model.Cheque;
+import com.iispl.validations.AccountNumberValidation;
+import com.iispl.validations.ChequeAmountValidation;
+
+import com.iispl.validations.ChequeNumberValidation;
+import com.iispl.validations.PresentedDateValidation;
+import com.iispl.validations.ValidationRule;
+
+public class ChequeServiceImpl implements ChequeService {
+
+    private ChequeDTO chequeDTO = new ChequedtoIMPL();
+
+    private List<Cheque> eligibleChequeList = new ArrayList<>();
+
+    @Override
+    public void displayAllCheques() {
+
+        List<Cheque> chequeList = chequeDTO.getAllCheques();
+
+        for (Cheque cheque : chequeList) {
+            System.out.println(cheque);
+        }
+    }
+
+    @Override
+    public void processAllCheques() {
+
+        List<Cheque> chequeList = chequeDTO.getAllCheques();
+
+        List<ValidationRule> validations = new ArrayList<>();
+
+        validations.add(new ChequeNumberValidation());
+       
+       
+
+        for (Cheque cheque : chequeList) {
+
+            boolean valid = true;
+
+            for (ValidationRule rule : validations) {
+
+                ChequeValidationEnum result = rule.validate(cheque);
+
+                if (result != ChequeValidationEnum.VALIDATION_SUCCESS) {
+
+                   cheque.setStatus(ChequeStatus.REJECTED);
+                    chequeDTO.updateChequeStatus(cheque);
+
+                    System.out.println(cheque.getChequeNumber() + " : " + result);
+
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (valid) {
+
+                cheque.setStatus(ChequeStatus.ACCEPTED);
+                chequeDTO.updateChequeStatus(cheque);
+
+                eligibleChequeList.add(cheque);
+
+                System.out.println(cheque.getChequeNumber() + " : ACCEPTED");
+            }
+        }
+    }
+
+    @Override
+    public void displayEligibleCheques() {
+
+        for (Cheque cheque : eligibleChequeList) {
+            System.out.println(cheque);
+        }
+    }
+}
