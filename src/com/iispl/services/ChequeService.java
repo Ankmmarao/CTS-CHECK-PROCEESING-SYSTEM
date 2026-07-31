@@ -1,3 +1,4 @@
+
 package com.iispl.services;
 
 import java.util.List;
@@ -18,4 +19,11 @@ public interface ChequeService {
 
 	void displayHighValuedCheques(List<Cheque> allCheques);
 
+
+	
+	void sortByAmountDescending(List<Cheque> allCheques);
+	
+	void sortByPriorityAndStatus(List<Cheque> allCheques);
+	
+	void sortByAmountAscending(List<Cheque> allCheques);
 }

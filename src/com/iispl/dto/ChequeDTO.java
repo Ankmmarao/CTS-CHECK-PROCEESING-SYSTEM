@@ -16,4 +16,14 @@ public interface ChequeDTO {
 
 	void displayHighValuedCheques(List<Cheque> cheques);
 
+
+    
+
+	void sortByAmountDescending(List<Cheque> allCheques);
+
+	void sortByAmountAscending(List<Cheque> allCheques);
+
+	void sortByPriorityAndStatus(List<Cheque> allCheques);
+
+	boolean isChequeNumberExists(String chequeNumber);
 }

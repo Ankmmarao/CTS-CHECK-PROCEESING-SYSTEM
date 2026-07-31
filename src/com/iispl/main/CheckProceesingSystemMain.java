@@ -1,9 +1,12 @@
 package com.iispl.main;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.iispl.dto.ChequeDTO;
 import com.iispl.dto.ChequedtoIMPL;
+import com.iispl.exception.DuplicateChequeNumberException;
+import com.iispl.model.Cheque;
 import com.iispl.services.ChequeService;
 import com.iispl.services.ChequeServiceImpl;
 
@@ -14,7 +17,7 @@ public class CheckProceesingSystemMain {
         Scanner scanner = new Scanner(System.in);
 
         ChequeService chequeService = new ChequeServiceImpl();
-        ChequeDTO chequeDto = new ChequedtoIMPL();
+        ChequeDTO chequeDTO = new ChequedtoIMPL();
 
         while (true) {
 
@@ -22,13 +25,18 @@ public class CheckProceesingSystemMain {
             System.out.println("1. Display All Cheques");
             System.out.println("2. Process All Cheques");
             System.out.println("3. Display Eligible Cheques");
-            System.out.println("6. Sort by Presenting Bank and Amount");
-            System.out.println("7. Sort cheques by cheque_date");
-            System.out.println("8. Display High Valued Cheques");
-            System.out.println("9. Exit");
-            System.out.print("Enter your choice: ");
+            System.out.println("4. Sort By Presenting Bank And Amount");
+            System.out.println("5. Sort By Cheque Date");
+            System.out.println("6. Display High Value Cheques");
+            System.out.println("7. Sort By Amount Ascending");
+            System.out.println("8. Sort By Amount Descending");
+            System.out.println("9. Sort By Priority And Status");
+            System.out.println("10. Exit");
+            System.out.print("Enter your choice : ");
 
             int choice = scanner.nextInt();
+
+            List<Cheque> chequeList = chequeDTO.getAllCheques();
 
             switch (choice) {
 
@@ -37,28 +45,42 @@ public class CheckProceesingSystemMain {
                 break;
 
             case 2:
-                chequeService.processAllCheques();
+                try {
+                    chequeService.processAllCheques();
+                } catch (DuplicateChequeNumberException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
 
             case 3:
                 chequeService.displayEligibleCheques();
                 break;
-                
-                
-                
-                
-                
-            case 6: 
-            	chequeService.sortByChequeByPresentingBankAndAmount(chequeDto.getAllCheques());
+
+            case 4:
+                chequeService.sortByChequeByPresentingBankAndAmount(chequeList);
                 break;
-                
+
+            case 5:
+                chequeService.sortChequeByDate(chequeList);
+                break;
+
+            case 6:
+                chequeService.displayHighValuedCheques(chequeList);
+                break;
+
             case 7:
-            	chequeService.sortChequeByDate(chequeDto.getAllCheques());
-            	break;
+                chequeService.sortByAmountAscending(chequeList);
+                break;
+
             case 8:
-            	chequeService.displayHighValuedCheques(chequeDto.getAllCheques());
-            	break;
+                chequeService.sortByAmountDescending(chequeList);
+                break;
+
             case 9:
+                chequeService.sortByPriorityAndStatus(chequeList);
+                break;
+
+            case 10:
                 System.out.println("Thank You...");
                 scanner.close();
                 System.exit(0);

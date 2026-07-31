@@ -3,16 +3,14 @@ package com.iispl.validations;
 import com.iispl.enums.ChequeValidationEnum;
 import com.iispl.model.Cheque;
 
-public class ChequeNumberValidation implements ValidationRule {
+public class StatusValidation implements ValidationRule {
 
     @Override
     public ChequeValidationEnum validate(Cheque cheque) {
 
-        if (cheque.getChequeNumber() == null || cheque.getChequeNumber().trim().isEmpty()) {
-            return ChequeValidationEnum.INVALID_CHEQUE_NUMBER;
+        if (cheque.getStatus() == null) {
+            return ChequeValidationEnum.INVALID_STATUS;
         }
-
-      
 
         return ChequeValidationEnum.VALIDATION_SUCCESS;
     }

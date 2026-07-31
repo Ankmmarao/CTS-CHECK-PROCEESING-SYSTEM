@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.iispl.enums.ChequeValidationEnum;
 import com.iispl.model.Cheque;
 
+
 public class ChequeAmountValidation implements ValidationRule{
 
 	@Override

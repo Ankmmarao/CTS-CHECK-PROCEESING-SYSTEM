@@ -1,9 +1,11 @@
 package com.iispl.dto;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,7 +22,8 @@ public class ChequedtoIMPL implements ChequeDTO {
         List<Cheque> chequeList = new ArrayList<>();
 
         try (Connection connection = ConnectionPool.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM cheque");
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement("SELECT * FROM cheque");
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -54,14 +57,41 @@ public class ChequedtoIMPL implements ChequeDTO {
     }
 
     @Override
-    public void updateChequeStatus(Cheque cheque) {
+    public boolean isChequeNumberExists(String chequeNumber) {
+
+        String sql = "SELECT COUNT(*) AS total FROM cheque WHERE cheque_number=?";
 
         try (Connection connection = ConnectionPool.getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "UPDATE cheque SET status=? WHERE cheque_number=?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, chequeNumber);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt("total") > 1;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public void updateChequeStatus(Cheque cheque) {
+
+        String sql =
+                "UPDATE cheque SET status=?, priority=? WHERE cheque_number=?";
+
+        try (Connection connection = ConnectionPool.getDataSource().getConnection();
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, cheque.getStatus().name());
-            preparedStatement.setString(2, cheque.getChequeNumber());
+            preparedStatement.setString(2, cheque.getPriority().name());
+            preparedStatement.setString(3, cheque.getChequeNumber());
 
             preparedStatement.executeUpdate();
 
@@ -70,64 +100,89 @@ public class ChequedtoIMPL implements ChequeDTO {
         }
     }
 
-	@Override
-	public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
-		chequeList.sort(
-				Comparator.comparing(Cheque::getPresentingBank).thenComparing(Cheque::getChequeAmount));
-		
-		
-		System.out.printf("%-15s %-15s %-20s %-20s %-15s %-15s %-15s %-12s %-12s%n",
-		        "Cheque No",
-		        "Account No",
-		        "Drawer Name",
-		        "Presenting Bank",
-		        "Amount",
-		        "Cheque Date",
-		        "Presented Date",
-		        "Priority",
-		        "Status");
+    @Override
+    public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
 
-		System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
+        chequeList.sort(
+                Comparator.comparing(Cheque::getPresentingBank)
+                          .thenComparing(Cheque::getChequeAmount));
 
-		chequeList.forEach(cheque ->
-		    System.out.printf("%-15s %-15s %-20s %-20s %-15s %-15s %-15s %-12s %-12s%n",
-		            cheque.getChequeNumber(),
-		            cheque.getAccountNumber(),
-		            cheque.getDrawerName(),
-		            cheque.getPresentingBank(),
-		            cheque.getChequeAmount(),
-		            cheque.getChequeDate(),
-		            cheque.getPresentedDate(),
-		            cheque.getPriority(),
-		            cheque.getStatus())
-		);
-	}
+        System.out.printf(
+                "%-15s %-15s %-20s %-20s %-15s %-15s %-15s %-12s %-12s%n",
+                "Cheque No",
+                "Account No",
+                "Drawer Name",
+                "Presenting Bank",
+                "Amount",
+                "Cheque Date",
+                "Presented Date",
+                "Priority",
+                "Status");
 
-	@Override
-	public void sortChequeByDate(List<Cheque> chequeList) {
+        System.out.println(
+                "-------------------------------------------------------------------------------------------------------------------------------");
 
-	    chequeList.sort((c1, c2) ->
-	            c1.getChequeDate().compareTo(c2.getChequeDate()));
-	    chequeList.forEach(System.out::println);
-	}
+        chequeList.forEach(cheque ->
+                System.out.printf(
+                        "%-15s %-15s %-20s %-20s %-15s %-15s %-15s %-12s %-12s%n",
+                        cheque.getChequeNumber(),
+                        cheque.getAccountNumber(),
+                        cheque.getDrawerName(),
+                        cheque.getPresentingBank(),
+                        cheque.getChequeAmount(),
+                        cheque.getChequeDate(),
+                        cheque.getPresentedDate(),
+                        cheque.getPriority(),
+                        cheque.getStatus()));
+    }
 
-	@Override
-	public void displayHighValuedCheques(List<Cheque> cheques) {
-		cheques.forEach(cheque ->{
-			if(cheque.getPriority() == ChequePriority.HIGH) {
-				 System.out.println(
-						 	"ChequeNumber:"+cheque.getChequeNumber()+"\n"+
-				    		 "Account number:"+cheque.getAccountNumber()+"\n"+
-				    		 "Drawer name:"+cheque.getDrawerName()+"\n"+
-				    		 "PresentingBank:"+cheque.getPresentingBank()+"\n"+
-				    		 "Cheque Amount:"+cheque.getChequeAmount()+"\n"+
-				    		 "Cheque Date:"+cheque.getChequeDate()+"\n"+
-				    		 "Presented Date:"+cheque.getPresentedDate()+"\n"+
-				    		 "Priority:"+cheque.getPriority()+"\n"+
-				    		 "Status:"+cheque.getStatus());
-				 System.out.println();
-			}
-		});
-		
-	}
+    @Override
+    public void sortChequeByDate(List<Cheque> chequeList) {
+
+        chequeList.sort(Comparator.comparing(Cheque::getChequeDate));
+
+        chequeList.forEach(System.out::println);
+    }
+
+    @Override
+    public void displayHighValuedCheques(List<Cheque> chequeList) {
+
+        for (Cheque cheque : chequeList) {
+
+            if (cheque.getPriority() == ChequePriority.HIGH) {
+
+                System.out.println(cheque);
+                System.out.println("--------------------------------------------");
+            }
+        }
+    }
+
+    @Override
+    public void sortByAmountDescending(List<Cheque> allCheques) {
+
+        allCheques.sort(
+                Comparator.comparing(Cheque::getChequeAmount).reversed());
+
+        allCheques.forEach(System.out::println);
+    }
+
+    @Override
+    public void sortByAmountAscending(List<Cheque> allCheques) {
+
+        Collections.sort(
+                allCheques,
+                Comparator.comparing(Cheque::getChequeAmount));
+
+        allCheques.forEach(System.out::println);
+    }
+
+    @Override
+    public void sortByPriorityAndStatus(List<Cheque> allCheques) {
+
+        allCheques.sort(
+                Comparator.comparing(Cheque::getPriority)
+                          .thenComparing(Cheque::getStatus));
+
+        allCheques.forEach(System.out::println);
+    }
 }

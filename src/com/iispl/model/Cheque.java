@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import com.iispl.enums.ChequePriority;
 import com.iispl.enums.ChequeStatus;
 
-public class Cheque {
+public class Cheque implements Comparable<Cheque>{
 
     private String chequeNumber;
     private String accountNumber;
@@ -19,9 +19,7 @@ public class Cheque {
     private ChequeStatus status;
 
     
-    public Cheque(String chequeNumber, String accountNumber, String drawerName,
-                  String presentingBank, BigDecimal chequeAmount,
-                  LocalDate chequeDate, LocalDate presentedDate,
+    public Cheque(String chequeNumber, String accountNumber, String drawerName, String presentingBank, BigDecimal chequeAmount,LocalDate chequeDate, LocalDate presentedDate,
                   ChequePriority priority, ChequeStatus status) {
 
         this.chequeNumber = chequeNumber;
@@ -127,4 +125,12 @@ public class Cheque {
                 + ", priority=" + priority
                 + ", status=" + status + "]";
     }
+
+
+
+	@Override
+	public int compareTo(Cheque o) {
+		// TODO Auto-generated method stub
+		return this.getChequeNumber().compareTo(o.getChequeNumber());
+	}
 }
