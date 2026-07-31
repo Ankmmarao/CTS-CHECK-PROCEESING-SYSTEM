@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.iispl.connectionpool.ConnectionPool;
@@ -68,4 +69,37 @@ public class ChequedtoIMPL implements ChequeDTO {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
+		chequeList.sort(
+				Comparator.comparing(Cheque::getPresentingBank).thenComparing(Cheque::getChequeAmount));
+		
+		
+		System.out.printf("%-15s %-15s %-20s %-20s %-15s %-15s %-15s %-12s %-12s%n",
+		        "Cheque No",
+		        "Account No",
+		        "Drawer Name",
+		        "Presenting Bank",
+		        "Amount",
+		        "Cheque Date",
+		        "Presented Date",
+		        "Priority",
+		        "Status");
+
+		System.out.println("-------------------------------------------------------------------------------------------------------------------------------");
+
+		chequeList.forEach(cheque ->
+		    System.out.printf("%-15s %-15s %-20s %-20s %-15s %-15s %-15s %-12s %-12s%n",
+		            cheque.getChequeNumber(),
+		            cheque.getAccountNumber(),
+		            cheque.getDrawerName(),
+		            cheque.getPresentingBank(),
+		            cheque.getChequeAmount(),
+		            cheque.getChequeDate(),
+		            cheque.getPresentedDate(),
+		            cheque.getPriority(),
+		            cheque.getStatus())
+		);
+	}
 }

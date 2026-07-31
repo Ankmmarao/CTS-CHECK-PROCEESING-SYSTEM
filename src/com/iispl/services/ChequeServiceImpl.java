@@ -85,4 +85,10 @@ public class ChequeServiceImpl implements ChequeService {
             System.out.println(cheque);
         }
     }
+
+	@Override
+	public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
+		 chequeDTO.sortByChequeByPresentingBankAndAmount(chequeList);
+		
+	}
 }
