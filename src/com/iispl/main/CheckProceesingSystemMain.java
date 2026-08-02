@@ -31,6 +31,7 @@ public class CheckProceesingSystemMain {
             System.out.println("7. Sort By Amount Ascending");
             System.out.println("8. Sort By Amount Descending");
             System.out.println("9. Sort By Priority And Status");
+            System.out.println("11. Report");
             System.out.println("10. Exit");
             System.out.print("Enter your choice : ");
 
@@ -39,7 +40,7 @@ public class CheckProceesingSystemMain {
             List<Cheque> chequeList = chequeDTO.getAllCheques();
 
             switch (choice) {
-
+            
             case 1:
                 chequeService.displayAllCheques();
                 break;
@@ -85,6 +86,11 @@ public class CheckProceesingSystemMain {
                 scanner.close();
                 System.exit(0);
                 break;
+                
+            case 11:
+            	chequeService.checkProcessingReports(chequeList);
+            	break;
+            	
 
             default:
                 System.out.println("Invalid Choice.");

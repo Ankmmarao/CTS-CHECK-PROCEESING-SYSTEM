@@ -35,97 +35,135 @@ public class Cheque implements Comparable<Cheque>{
 
   
 
-    public Cheque() {
-		// TODO Auto-generated constructor stub
+    public String getChequeNumber() {
+		return chequeNumber;
 	}
 
 
 
-	public String getChequeNumber() {
-        return chequeNumber;
-    }
+	public void setChequeNumber(String chequeNumber) {
+		this.chequeNumber = chequeNumber;
+	}
 
-    public void setChequeNumber(String chequeNumber) {
-        this.chequeNumber = chequeNumber;
-    }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
+	public String getAccountNumber() {
+		return accountNumber;
+	}
 
-    public String getDrawerName() {
-        return drawerName;
-    }
 
-    public void setDrawerName(String drawerName) {
-        this.drawerName = drawerName;
-    }
 
-    public String getPresentingBank() {
-        return presentingBank;
-    }
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 
-    public void setPresentingBank(String presentingBank) {
-        this.presentingBank = presentingBank;
-    }
 
-    public BigDecimal getChequeAmount() {
-        return chequeAmount;
-    }
 
-    public void setChequeAmount(BigDecimal chequeAmount) {
-        this.chequeAmount = chequeAmount;
-    }
+	public String getDrawerName() {
+		return drawerName;
+	}
 
-    public LocalDate getChequeDate() {
-        return chequeDate;
-    }
 
-    public void setChequeDate(LocalDate chequeDate) {
-        this.chequeDate = chequeDate;
-    }
 
-    public LocalDate getPresentedDate() {
-        return presentedDate;
-    }
+	public void setDrawerName(String drawerName) {
+		this.drawerName = drawerName;
+	}
 
-    public void setPresentedDate(LocalDate presentedDate) {
-        this.presentedDate = presentedDate;
-    }
 
-    public ChequePriority getPriority() {
-        return priority;
-    }
 
-    public void setPriority(ChequePriority priority) {
-        this.priority = priority;
-    }
+	public String getPresentingBank() {
+		return presentingBank;
+	}
 
-    public ChequeStatus getStatus() {
-        return status;
-    }
 
-    public void setStatus(ChequeStatus status) {
-        this.status = status;
-    }
+
+	public void setPresentingBank(String presentingBank) {
+		this.presentingBank = presentingBank;
+	}
+
+
+
+	public BigDecimal getChequeAmount() {
+		return chequeAmount;
+	}
+
+
+
+	public void setChequeAmount(BigDecimal chequeAmount) {
+		this.chequeAmount = chequeAmount;
+	}
+
+
+
+	public LocalDate getChequeDate() {
+		return chequeDate;
+	}
+
+
+
+	public void setChequeDate(LocalDate chequeDate) {
+		this.chequeDate = chequeDate;
+	}
+
+
+
+	public LocalDate getPresentedDate() {
+		return presentedDate;
+	}
+
+
+
+	public void setPresentedDate(LocalDate presentedDate) {
+		this.presentedDate = presentedDate;
+	}
+
+
+
+	public ChequePriority getPriority() {
+		return priority;
+	}
+
+
+
+	public void setPriority(ChequePriority priority) {
+		this.priority = priority;
+	}
+
+
+
+	public ChequeStatus getStatus() {
+		return status;
+	}
+
+
+
+	public void setStatus(ChequeStatus status) {
+		this.status = status;
+	}
+
+
+
+	public Cheque() {
+		
+	}
+
+
 
     @Override
     public String toString() {
-        return "Cheque [chequeNumber= " + chequeNumber
-                + ", accountNumber=" + accountNumber
-                + ", drawerName=" + drawerName
-                + ", presentingBank=" + presentingBank
-                + ", chequeAmount=" + chequeAmount
-                + ", chequeDate=" + chequeDate
-                + ", presentedDate=" + presentedDate
-                + ", priority=" + priority
-                + ", status=" + status + "]";
-    }
 
+        return String.format(
+                "| %-12s | %-15s | %-20s | %-20s | %-12s | %-12s | %-15s | %-8s | %-10s |",
+                chequeNumber,
+                accountNumber,
+                drawerName,
+                presentingBank,
+                chequeAmount,
+                chequeDate,
+                presentedDate,
+                priority,
+                status);
+    }
 
 
 	@Override

@@ -26,4 +26,6 @@ public interface ChequeDTO {
 	void sortByPriorityAndStatus(List<Cheque> allCheques);
 
 	boolean isChequeNumberExists(String chequeNumber);
+
+	void checkProcessingReports(List<Cheque> cheque);
 }

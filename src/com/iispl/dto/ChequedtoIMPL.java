@@ -8,13 +8,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 
 import com.iispl.connectionpool.ConnectionPool;
 import com.iispl.enums.ChequePriority;
 import com.iispl.enums.ChequeStatus;
+import com.iispl.exception.AccountNotFoundException;
 import com.iispl.model.Cheque;
+import com.iispl.services.ChequeServiceImpl;
 
 public class ChequedtoIMPL implements ChequeDTO {
+	
+	
+	
+	
+	
+	Scanner input=new Scanner(System.in);
 
     @Override
     public List<Cheque> getAllCheques() {
@@ -25,7 +34,7 @@ public class ChequedtoIMPL implements ChequeDTO {
              PreparedStatement preparedStatement =
                      connection.prepareStatement("SELECT * FROM cheque");
              ResultSet resultSet = preparedStatement.executeQuery()) {
-
+        	connection.setAutoCommit(false);
             while (resultSet.next()) {
 
                 Cheque cheque = new Cheque();
@@ -47,6 +56,8 @@ public class ChequedtoIMPL implements ChequeDTO {
                                 resultSet.getString("status").trim().toUpperCase()));
 
                 chequeList.add(cheque);
+                
+                
             }
 
         } catch (Exception e) {
@@ -185,4 +196,211 @@ public class ChequedtoIMPL implements ChequeDTO {
 
         allCheques.forEach(System.out::println);
     }
+    
+    public static void acceptedValuesChequesReport(List<Cheque> cheques) {
+
+        int acceptedCount = 0;
+        int highCount = 0;
+        int mediumCount = 0;
+        int lowCount = 0;
+        int totalCheques = 0;
+
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        BigDecimal maxChequeAmount = BigDecimal.ZERO;
+        BigDecimal minChequeAmount = null;
+
+        for (Cheque cheque : cheques) {
+
+            totalCheques++;
+
+            if (cheque.getStatus() == ChequeStatus.ACCEPTED) {
+
+                acceptedCount++;
+
+                switch (cheque.getPriority()) {
+
+                case HIGH:
+                    highCount++;
+                    break;
+
+                case MEDIUM:
+                    mediumCount++;
+                    break;
+
+                case LOW:
+                    lowCount++;
+                    break;
+                }
+
+                totalAmount = totalAmount.add(cheque.getChequeAmount());
+
+                if (cheque.getChequeAmount().compareTo(maxChequeAmount) > 0) {
+                    maxChequeAmount = cheque.getChequeAmount();
+                }
+
+                if (minChequeAmount == null
+                        || cheque.getChequeAmount().compareTo(minChequeAmount) < 0) {
+                    minChequeAmount = cheque.getChequeAmount();
+                }
+            }
+            
+        }
+
+        System.out.println("\n========= ACCEPTED CHEQUE PROCESSING REPORT =========");
+        System.out.println("Total Cheques          : " + totalCheques);
+        System.out.println("Accepted Cheques       : " + acceptedCount);
+        System.out.println("High Priority          : " + highCount);
+        System.out.println("Medium Priority        : " + mediumCount);
+        System.out.println("Low Priority           : " + lowCount);
+        System.out.println("Total Accepted Amount  : ₹" + totalAmount);
+        System.out.println("Maximum Cheque Amount  : ₹" + maxChequeAmount);
+        System.out.println("Minimum Cheque Amount  : ₹" + minChequeAmount);
+    }
+    public static void rejectedValuesChequesReport(List<Cheque> cheques) {
+
+        int acceptedCount = 0;
+        int highCount = 0;
+        int mediumCount = 0;
+        int lowCount = 0;
+        int totalCheques = 0;
+
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        BigDecimal maxChequeAmount = BigDecimal.ZERO;
+        BigDecimal minChequeAmount = null;
+
+        for (Cheque cheque : cheques) {
+
+            totalCheques++;
+
+            if (cheque.getStatus() == ChequeStatus.REJECTED) {
+
+                acceptedCount++;
+
+                switch (cheque.getPriority()) {
+
+                case HIGH:
+                    highCount++;
+                    break;
+
+                case MEDIUM:
+                    mediumCount++;
+                    break;
+
+                case LOW:
+                    lowCount++;
+                    break;
+                }
+
+
+                if (cheque.getChequeAmount().compareTo(maxChequeAmount) > 0) {
+                    maxChequeAmount = cheque.getChequeAmount();
+                }
+
+                if (minChequeAmount == null
+                        || cheque.getChequeAmount().compareTo(minChequeAmount) < 0) {
+                    minChequeAmount = cheque.getChequeAmount();
+                }
+            }
+            
+        }
+
+        System.out.println("\n========= ACCEPTED CHEQUE PROCESSING REPORT =========");
+        System.out.println("Total Cheques          : " + totalCheques);
+        System.out.println("Rejected Cheques       : " + acceptedCount);
+        System.out.println("High Priority          : " + highCount);
+        System.out.println("Medium Priority        : " + mediumCount);
+        System.out.println("Low Priority           : " + lowCount);
+        System.out.println("Maximum Cheque Amount  : ₹" + maxChequeAmount);
+        System.out.println("Minimum Cheque Amount  : ₹" + minChequeAmount);
+    }
+  
+    
+    public static void customerChequeProcessingReports(List<Cheque> cheques, String accountNumber) {
+
+        int total = 0;
+        int acceptedCount = 0;
+        int rejectedCount = 0;
+
+        BigDecimal acceptedAmount = BigDecimal.ZERO;
+
+        System.out.println("\n========== CUSTOMER CHEQUE REPORT ==========");
+
+        for (Cheque cheque : cheques) {
+        	
+        	if (!ChequeServiceImpl.isAccountExists(accountNumber)) {
+        	    throw new AccountNotFoundException("AccountNot FoundException");
+        	}
+
+        	
+        	      if (cheque.getAccountNumber().equals(accountNumber)) {
+
+                total++;
+
+                System.out.println("Cheque Number   : " + cheque.getChequeNumber());
+                System.out.println("Drawer Name     : " + cheque.getDrawerName());
+                System.out.println("Presenting Bank : " + cheque.getPresentingBank());
+                System.out.println("Cheque Amount   : " + cheque.getChequeAmount());
+                System.out.println("Priority        : " + cheque.getPriority());
+                System.out.println("Status          : " + cheque.getStatus());
+
+                if (cheque.getStatus() == ChequeStatus.ACCEPTED) {
+
+                    acceptedCount++;
+                    acceptedAmount = acceptedAmount.add(cheque.getChequeAmount());
+
+                } else if (cheque.getStatus() == ChequeStatus.REJECTED) {
+
+                    rejectedCount++;
+                }
+            }
+            
+        }
+
+        System.out.println("\n============= REPORT =============");
+        System.out.println("Account Number          : " + accountNumber);
+        System.out.println("Total Cheques           : " + total);
+        System.out.println("Accepted Cheques        : " + acceptedCount);
+        System.out.println("Rejected Cheques        : " + rejectedCount);
+        System.out.println("Accepted Cheque Amount  : ₹" + acceptedAmount);
+    }
+    @Override
+    public void checkProcessingReports(List<Cheque> cheques) {
+
+       System.out.println("1.Cheques REPORTS FOR THE ACCEPTED CHEQUES\n 2.REJECTED CHEQUES PROCESSING REPOERT\n 3.CUSTOMER PROCESING REPORTS");
+       
+       int op=input.nextInt();
+       switch(op) {
+       case 1:
+    	   acceptedValuesChequesReport(cheques);
+    	   
+    	   break;
+       case 2:
+    	   rejectedValuesChequesReport(cheques);
+    	   break;
+    	   
+       case 3:
+    	   
+    	   
+    	   try {
+    		   System.out.println("Enter the Account Number:");
+        	   String accountNumber=input.next();
+        	   customerChequeProcessingReports(cheques,accountNumber);
+
+    	   }
+    	   catch(AccountNotFoundException e) {
+    		   e.getMessage();
+    	   }
+    	   
+    	   break;
+    	   
+    	   
+    	default:
+    		System.out.println("Invalid Option");
+    	   
+       }
+    }
+		
+		
+		
+	
 }

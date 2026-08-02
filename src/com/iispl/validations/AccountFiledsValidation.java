@@ -3,7 +3,7 @@ package com.iispl.validations;
 import com.iispl.enums.ChequeValidationEnum;
 import com.iispl.model.Cheque;
 
-public class AccountFiledsrValidation implements ValidationRule {
+public class AccountFiledsValidation implements ValidationRule {
 
     @Override
     public ChequeValidationEnum validate(Cheque cheque) {

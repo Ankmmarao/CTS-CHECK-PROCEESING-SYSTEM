@@ -26,4 +26,6 @@ public interface ChequeService {
 	void sortByPriorityAndStatus(List<Cheque> allCheques);
 	
 	void sortByAmountAscending(List<Cheque> allCheques);
+	
+	void checkProcessingReports(List<Cheque> cheque);
 }
