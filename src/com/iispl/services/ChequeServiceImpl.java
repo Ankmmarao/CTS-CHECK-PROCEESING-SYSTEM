@@ -14,7 +14,7 @@ import com.iispl.model.Cheque;
 
 import com.iispl.validations.ChequeNumberValidation;
 
-import com.iispl.validations.AccountFiledsrValidation;
+import com.iispl.validations.AccountFiledsValidation;
 import com.iispl.validations.ChequeAmountValidation;
 import com.iispl.validations.ChequeNumberValidation;
 import com.iispl.validations.PresentedDateValidation;
@@ -24,7 +24,7 @@ import com.iispl.validations.ValidationRule;
 
 public class ChequeServiceImpl implements ChequeService {
 
-    private ChequeDTO chequeDTO = new ChequedtoIMPL();
+    private static ChequeDTO chequeDTO = new ChequedtoIMPL();
 
     private List<Cheque> eligibleChequeList = new ArrayList<>();
     
@@ -52,9 +52,19 @@ public class ChequeServiceImpl implements ChequeService {
         validations.add(new ChequeNumberValidation());
         validations.add(new ChequeAmountValidation());
         validations.add(new PresentedDateValidation());
-        validations.add(new AccountFiledsrValidation());
+        validations.add(new AccountFiledsValidation());
         validations.add(new PriorityValidation());
         validations.add(new StatusValidation());
+        
+        System.out.println("------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf(
+                "| %-12s | %-12s | %-12s | %-10s | %-20s |%n",
+                "Cheque No",
+                "Amount",
+                "Priority",
+                "Status",
+                "Result");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------");
 
         for (Cheque cheque : chequeList) {
 
@@ -69,8 +79,13 @@ public class ChequeServiceImpl implements ChequeService {
                     cheque.setStatus(ChequeStatus.REJECTED);
                     chequeDTO.updateChequeStatus(cheque);
 
-                    System.out.println(cheque.getChequeNumber() + " : " + result);
-
+                    System.out.printf(
+                            "| %-12s | %-12s | %-12s | %-10s | %-20s |%n",
+                            cheque.getChequeNumber(),
+                            cheque.getChequeAmount(),
+                            cheque.getPriority(),
+                            cheque.getStatus(),
+                            result);
                     valid = false;
                     break;
                 }
@@ -89,13 +104,12 @@ public class ChequeServiceImpl implements ChequeService {
                 
 
 
-                // Accept the cheque
                 cheque.setStatus(ChequeStatus.ACCEPTED);
 
-                // Get cheque amount
+              
                 BigDecimal amount = cheque.getChequeAmount();
 
-                // Assign priority
+               
                 if (amount.compareTo(new BigDecimal("200000")) > 0) {
 
                     cheque.setPriority(ChequePriority.HIGH);
@@ -109,24 +123,57 @@ public class ChequeServiceImpl implements ChequeService {
                     cheque.setPriority(ChequePriority.LOW);
                 }
 
-                // Update database
+            
                 chequeDTO.updateChequeStatus(cheque);
 
-                // Add to eligible list
+             
                 eligibleChequeList.add(cheque);
 
-                System.out.println(cheque.getChequeNumber()
-                        + " : ACCEPTED (" + cheque.getPriority() + ")");
+                System.out.printf(
+                        "| %-12s | %-12s | %-12s | %-10s | %-20s |%n",
+                        cheque.getChequeNumber(),
+                        cheque.getChequeAmount(),
+                        cheque.getPriority(),
+                        cheque.getStatus(),
+                        "VALIDATION SUCCESS");
             }
         }
     }
-
     @Override
     public void displayEligibleCheques() {
 
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        System.out.printf(
+                "| %-12s | %-15s | %-20s | %-20s | %-12s | %-12s | %-15s | %-8s | %-10s |%n",
+                "Cheque No",
+                "Account No",
+                "Drawer Name",
+                "Presenting Bank",
+                "Amount",
+                "Cheque Date",
+                "Presented Date",
+                "Priority",
+                "Status");
+
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
         for (Cheque cheque : eligibleChequeList) {
-            System.out.println(cheque);
+
+            System.out.printf(
+                    "| %-12s | %-15s | %-20s | %-20s | %-12s | %-12s | %-15s | %-8s | %-10s |%n",
+                    cheque.getChequeNumber(),
+                    cheque.getAccountNumber(),
+                    cheque.getDrawerName(),
+                    cheque.getPresentingBank(),
+                    cheque.getChequeAmount(),
+                    cheque.getChequeDate(),
+                    cheque.getPresentedDate(),
+                    cheque.getPriority(),
+                    cheque.getStatus());
         }
+
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
 	@Override
@@ -165,5 +212,27 @@ public class ChequeServiceImpl implements ChequeService {
 		// TODO Auto-generated method stub
 		chequeDTO.sortByPriorityAndStatus(allCheques);
 		
+	}
+
+	@Override
+	public void checkProcessingReports(List<Cheque> cheque) {
+		// TODO Auto-generated method stub
+		chequeDTO.checkProcessingReports(cheque);
+		
+	}
+
+	public static boolean isAccountExists(String accountNumber) {
+
+	    if (accountNumber == null || accountNumber.trim().isEmpty()) {
+	        return false;
+	    }
+
+	    for (Cheque cheque : chequeDTO.getAllCheques()) {
+            if (cheque.getAccountNumber().equals(accountNumber)) {
+	            return true;
+	        }
+	    }
+
+	    return false;
 	}
 }
