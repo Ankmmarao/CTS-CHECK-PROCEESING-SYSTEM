@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.iispl.dto.ChequeDTO;
-import com.iispl.dto.ChequedtoIMPL;
+import com.iispl.dto.ChequeDAO;
+import com.iispl.dto.ChequedaoIMPL;
 import com.iispl.enums.ChequePriority;
 import com.iispl.enums.ChequeStatus;
 import com.iispl.enums.ChequeValidationEnum;
@@ -13,8 +13,7 @@ import com.iispl.exception.DuplicateChequeNumberException;
 import com.iispl.model.Cheque;
 
 import com.iispl.validations.ChequeNumberValidation;
-
-import com.iispl.validations.AccountFiledsValidation;
+import com.iispl.validations.AccountFieldsValidation;
 import com.iispl.validations.ChequeAmountValidation;
 import com.iispl.validations.ChequeNumberValidation;
 import com.iispl.validations.PresentedDateValidation;
@@ -24,7 +23,7 @@ import com.iispl.validations.ValidationRule;
 
 public class ChequeServiceImpl implements ChequeService {
 
-    private static ChequeDTO chequeDTO = new ChequedtoIMPL();
+    private static ChequeDAO chequeDTO = new ChequedaoIMPL();
 
     private List<Cheque> eligibleChequeList = new ArrayList<>();
     
@@ -52,7 +51,7 @@ public class ChequeServiceImpl implements ChequeService {
         validations.add(new ChequeNumberValidation());
         validations.add(new ChequeAmountValidation());
         validations.add(new PresentedDateValidation());
-        validations.add(new AccountFiledsValidation());
+        validations.add(new AccountFieldsValidation());
         validations.add(new PriorityValidation());
         validations.add(new StatusValidation());
         

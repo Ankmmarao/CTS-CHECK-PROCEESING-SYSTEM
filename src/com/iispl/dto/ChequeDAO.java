@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.iispl.model.Cheque;
 
-public interface ChequeDTO {
+public interface ChequeDAO {
 
     List<Cheque> getAllCheques();
 
