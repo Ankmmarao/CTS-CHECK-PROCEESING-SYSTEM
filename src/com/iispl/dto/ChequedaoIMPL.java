@@ -17,7 +17,7 @@ import com.iispl.exception.AccountNotFoundException;
 import com.iispl.model.Cheque;
 import com.iispl.services.ChequeServiceImpl;
 
-public class ChequedtoIMPL implements ChequeDTO {
+public class ChequedaoIMPL implements ChequeDAO {
 	
 	
 	

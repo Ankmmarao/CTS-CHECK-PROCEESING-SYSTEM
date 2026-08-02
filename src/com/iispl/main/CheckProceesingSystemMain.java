@@ -3,8 +3,8 @@ package com.iispl.main;
 import java.util.List;
 import java.util.Scanner;
 
-import com.iispl.dto.ChequeDTO;
-import com.iispl.dto.ChequedtoIMPL;
+import com.iispl.dto.ChequeDAO;
+import com.iispl.dto.ChequedaoIMPL;
 import com.iispl.exception.DuplicateChequeNumberException;
 import com.iispl.model.Cheque;
 import com.iispl.services.ChequeService;
@@ -17,7 +17,7 @@ public class CheckProceesingSystemMain {
         Scanner scanner = new Scanner(System.in);
 
         ChequeService chequeService = new ChequeServiceImpl();
-        ChequeDTO chequeDTO = new ChequedtoIMPL();
+        ChequeDAO chequeDTO = new ChequedaoIMPL();
 
         while (true) {
 

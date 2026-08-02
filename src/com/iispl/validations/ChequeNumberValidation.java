@@ -8,12 +8,14 @@ public class ChequeNumberValidation implements ValidationRule {
     @Override
     public ChequeValidationEnum validate(Cheque cheque) {
 
-        if (cheque.getChequeNumber() == null || cheque.getChequeNumber().trim().isEmpty()) {
+        if (!isChequeNumberValid(cheque.getChequeNumber())) {
             return ChequeValidationEnum.INVALID_CHEQUE_NUMBER;
         }
 
-      
+     return ChequeValidationEnum.VALIDATION_SUCCESS;
+    }
 
-        return ChequeValidationEnum.VALIDATION_SUCCESS;
+    private boolean isChequeNumberValid(String chequeNumber) {
+             return chequeNumber != null && !chequeNumber.trim().isEmpty();
     }
 }
