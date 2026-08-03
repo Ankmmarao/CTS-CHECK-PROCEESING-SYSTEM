@@ -126,14 +126,6 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-	@Override
-	public String toString() {
-		return "Cheque [chequeNumber=" + chequeNumber + ", accountNumber=" + accountNumber + ", drawerName="
-				+ drawerName + ", presentingBank=" + presentingBank + ", chequeAmount=" + chequeAmount + ", chequeDate="
-				+ chequeDate + ", presentedDate=" + presentedDate + ", priority=" + priority + ", status=" + status
-				+ ", clearingZone=" + clearingZone + "]";
-	}
-
 
 	public String getClearingZone() {
 		return clearingZone;
@@ -143,7 +135,22 @@ public class Cheque implements Comparable<Cheque>{
 	public void setClearingZone(String clearingZone) {
 		this.clearingZone = clearingZone;
 	}
-
+	@Override
+	public String toString() {
+	    return String.format(
+	        "%-12s %-15s %-15s %-18s %-12s %-12s %-15s %-10s %-12s %-15s",
+	        chequeNumber,
+	        accountNumber,
+	        drawerName,
+	        presentingBank,
+	        chequeAmount,
+	        chequeDate,
+	        presentedDate,
+	        priority,
+	        status,
+	        clearingZone
+	    );
+	}
 
 	@Override
 	public int compareTo(Cheque o) {
