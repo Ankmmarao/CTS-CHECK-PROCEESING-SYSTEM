@@ -15,6 +15,7 @@ import com.iispl.exception.DuplicateChequeNumberException;
 import com.iispl.model.Cheque;
 
 import com.iispl.validations.ChequeNumberValidation;
+import com.iispl.validations.ClearingZoneValidation;
 import com.iispl.validations.AccountFieldsValidation;
 import com.iispl.validations.ChequeAmountValidation;
 import com.iispl.validations.ChequeNumberValidation;
@@ -72,7 +73,7 @@ public class ChequeServiceImpl implements ChequeService {
         validations.add(new AccountFieldsValidation());
         validations.add(new PriorityValidation());
         validations.add(new StatusValidation());
-        
+        validations.add(new ClearingZoneValidation());
         System.out.println("------------------------------------------------------------------------------------------------------------------------");
         System.out.printf(
                 "| %-12s | %-12s | %-12s | %-10s | %-20s |%n",
