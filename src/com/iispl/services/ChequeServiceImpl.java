@@ -51,7 +51,7 @@ public class ChequeServiceImpl implements ChequeService {
 
         for (Cheque cheque : chequeList) {
         	
-        	if(cheque.getChequeNumber()!=null || cheque.getPresentingBank()!=null) {
+        	if(cheque.getChequeNumber()!=null || cheque.getPresentingBank()!=null || cheque.getDrawerName()!=null) {
         		 System.out.println(cheque);
         	}
            
