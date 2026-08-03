@@ -40,7 +40,7 @@ public class ChequedaoIMPL implements ChequeDAO {
 
             	
             	
-                Cheque cheque = new Cheque();
+                Cheque cheque = new Cheque(null, null, null, null, null, null, null, null, null, null);
                 if (isChequeNumberExists(cheque.getChequeNumber())) {
                     throw new DuplicateChequeNumberException("Duplicate Cheque Number: " + cheque.getChequeNumber());
                 }
@@ -55,6 +55,9 @@ public class ChequedaoIMPL implements ChequeDAO {
                 cheque.setPriority(ChequePriority.valueOf(resultSet.getString("priority").trim().toUpperCase()));
 
                 cheque.setStatus(ChequeStatus.valueOf(resultSet.getString("status").trim().toUpperCase()));
+                cheque.setClearingZone(
+                	    resultSet.getString("clearing_zone_name")
+                	);
 
                 chequeList.add(cheque);
                 
