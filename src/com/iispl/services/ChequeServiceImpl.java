@@ -252,4 +252,10 @@ public class ChequeServiceImpl implements ChequeService {
 
 	    return false;
 	}
+	@Override
+	public void sortByClearingZoneAndAmount(List<Cheque> eligibleChequeList) {
+		chequeDTO.sortByClearingZoneAndAmountComparator(eligibleChequeList);
+		
+	}
+	
 }
