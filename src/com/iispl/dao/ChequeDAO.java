@@ -16,7 +16,7 @@ public interface ChequeDAO {
 
 	void displayHighValuedCheques(List<Cheque> cheques);
 
-
+	
     
 
 	void sortByAmountDescending(List<Cheque> allCheques);
@@ -28,4 +28,6 @@ public interface ChequeDAO {
 	boolean isChequeNumberExists(String chequeNumber);
 
 	void checkProcessingReports(List<Cheque> cheque);
+	
+	void sortByClearingZoneAndAmountComparator(List<Cheque> cheque);
 }

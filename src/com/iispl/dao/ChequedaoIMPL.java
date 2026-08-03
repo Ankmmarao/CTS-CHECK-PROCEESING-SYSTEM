@@ -398,4 +398,19 @@ public class ChequedaoIMPL implements ChequeDAO {
     	}
 		
     }
+
+	@Override
+	public void sortByClearingZoneAndAmountComparator(List<Cheque> allCheques) {
+		// TODO Auto-generated method stub
+		        allCheques.sort(Comparator.comparing(Cheque::getClearingZone)
+		                  .thenComparing(Comparator.comparing(Cheque::getChequeAmount)
+		                                           .reversed()));
+		        
+		        allCheques.forEach(System.out::println);
+
+
+		
+	}
+
+	
 }
