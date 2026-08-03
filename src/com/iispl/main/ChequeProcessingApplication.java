@@ -81,16 +81,19 @@ public class ChequeProcessingApplication {
                 chequeService.sortByPriorityAndStatus();
                 break;
 
-            
             case 10:
-                System.out.println("Thank You...");
-                scanner.close();
-                System.exit(0);
+                chequeService.sortByClearingZoneAndAmount(chequeList);
                 break;
                 
             case 11:
             	chequeService.checkProcessingReports();
             	break;
+           
+            case 12:
+                System.out.println("Thank You...");
+                scanner.close();
+                System.exit(0);
+                break;
             	
 
             default:
