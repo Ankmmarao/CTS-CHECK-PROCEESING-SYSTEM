@@ -3,16 +3,16 @@ package com.iispl.main;
 import java.util.List;
 import java.util.Scanner;
 
-import com.iispl.dto.ChequeDAO;
-import com.iispl.dto.ChequedaoIMPL;
+import com.iispl.dao.ChequeDAO;
+import com.iispl.dao.ChequedaoIMPL;
 import com.iispl.exception.DuplicateChequeNumberException;
 import com.iispl.model.Cheque;
 import com.iispl.services.ChequeService;
 import com.iispl.services.ChequeServiceImpl;
 
-public class CheckProceesingSystemMain {
+public class ChequeProcessingApplication {
 
-    public static void main(String[] args) {
+    public static void startApplication() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -58,29 +58,30 @@ public class CheckProceesingSystemMain {
                 break;
 
             case 4:
-                chequeService.sortByChequeByPresentingBankAndAmount(chequeList);
+                chequeService.sortByChequeByPresentingBankAndAmount();
                 break;
 
             case 5:
-                chequeService.sortChequeByDate(chequeList);
+                chequeService.sortChequeByDate();
                 break;
 
             case 6:
-                chequeService.displayHighValuedCheques(chequeList);
+                chequeService.displayHighValuedCheques();
                 break;
 
             case 7:
-                chequeService.sortByAmountAscending(chequeList);
+                chequeService.sortByAmountAscending();
                 break;
 
             case 8:
-                chequeService.sortByAmountDescending(chequeList);
+                chequeService.sortByAmountDescending();
                 break;
 
             case 9:
-                chequeService.sortByPriorityAndStatus(chequeList);
+                chequeService.sortByPriorityAndStatus();
                 break;
 
+            
             case 10:
                 System.out.println("Thank You...");
                 scanner.close();
@@ -88,7 +89,7 @@ public class CheckProceesingSystemMain {
                 break;
                 
             case 11:
-            	chequeService.checkProcessingReports(chequeList);
+            	chequeService.checkProcessingReports();
             	break;
             	
 

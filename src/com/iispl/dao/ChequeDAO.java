@@ -1,4 +1,4 @@
-package com.iispl.dto;
+package com.iispl.dao;
 
 import java.util.List;
 

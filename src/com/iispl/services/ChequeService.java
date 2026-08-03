@@ -12,8 +12,24 @@ public interface ChequeService {
     void processAllCheques();
 
     void displayEligibleCheques();
+   
 
-    void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList);
+        void sortByChequeByPresentingBankAndAmount();
+
+        void sortChequeByDate();
+
+        void displayHighValuedCheques();
+
+        void sortByAmountDescending();
+
+        void sortByAmountAscending();
+
+        void sortByPriorityAndStatus();
+
+        void checkProcessingReports();
+    
+
+    /*void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList);
 
 	void sortChequeByDate(List<Cheque> allCheques);
 
@@ -28,4 +44,5 @@ public interface ChequeService {
 	void sortByAmountAscending(List<Cheque> allCheques);
 	
 	void checkProcessingReports(List<Cheque> cheque);
+	*/
 }

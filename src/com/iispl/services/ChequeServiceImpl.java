@@ -2,10 +2,12 @@ package com.iispl.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import com.iispl.dto.ChequeDAO;
-import com.iispl.dto.ChequedaoIMPL;
+import com.iispl.dao.ChequeDAO;
+import com.iispl.dao.ChequedaoIMPL;
 import com.iispl.enums.ChequePriority;
 import com.iispl.enums.ChequeStatus;
 import com.iispl.enums.ChequeValidationEnum;
@@ -17,6 +19,7 @@ import com.iispl.validations.AccountFieldsValidation;
 import com.iispl.validations.ChequeAmountValidation;
 import com.iispl.validations.ChequeNumberValidation;
 import com.iispl.validations.PresentedDateValidation;
+import com.iispl.validations.PresentingBankValidation;
 import com.iispl.validations.PriorityValidation;
 import com.iispl.validations.StatusValidation;
 import com.iispl.validations.ValidationRule;
@@ -26,11 +29,21 @@ public class ChequeServiceImpl implements ChequeService {
     private static ChequeDAO chequeDTO = new ChequedaoIMPL();
 
     private List<Cheque> eligibleChequeList = new ArrayList<>();
-    
-    private boolean isChequeNumberExists(String chequeNumber) {
-        return chequeDTO.isChequeNumberExists(chequeNumber);
-    }
+    static Set<String> chequeNumbers = new HashSet<>();
 
+    public static boolean isChequeNumberExists(String chequeNumber) {
+
+        Set<String> chequeNumbers = new HashSet<>();
+
+        for (Cheque cheque : chequeDTO.getAllCheques()) {
+
+            if (!chequeNumbers.add(cheque.getChequeNumber())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     @Override
     public void displayAllCheques() {
 
@@ -51,6 +64,7 @@ public class ChequeServiceImpl implements ChequeService {
         validations.add(new ChequeNumberValidation());
         validations.add(new ChequeAmountValidation());
         validations.add(new PresentedDateValidation());
+        validations.add(new PresentingBankValidation());
         validations.add(new AccountFieldsValidation());
         validations.add(new PriorityValidation());
         validations.add(new StatusValidation());
@@ -66,7 +80,7 @@ public class ChequeServiceImpl implements ChequeService {
         System.out.println("------------------------------------------------------------------------------------------------------------------------");
 
         for (Cheque cheque : chequeList) {
-
+            
             boolean valid = true;
 
             for (ValidationRule rule : validations) {
@@ -176,47 +190,47 @@ public class ChequeServiceImpl implements ChequeService {
     }
 
 	@Override
-	public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
-		 chequeDTO.sortByChequeByPresentingBankAndAmount(chequeList);
+	public void sortByChequeByPresentingBankAndAmount() {
+		 chequeDTO.sortByChequeByPresentingBankAndAmount( eligibleChequeList);
 	}
     
 
     @Override
-    public void sortChequeByDate(List<Cheque> chequeList) {
-        chequeDTO.sortChequeByDate(chequeList);
+    public void sortChequeByDate() {
+        chequeDTO.sortChequeByDate( eligibleChequeList);
     }
 
     @Override
-    public void displayHighValuedCheques(List<Cheque> chequeList) {
-        chequeDTO.displayHighValuedCheques(chequeList);
+    public void displayHighValuedCheques() {
+        chequeDTO.displayHighValuedCheques( eligibleChequeList);
     }
 
 	@Override
-	public void sortByAmountDescending(List<Cheque> allCheques) {
+	public void sortByAmountDescending() {
 		// TODO Auto-generated method stub
-		chequeDTO.sortByAmountDescending(allCheques);
+		chequeDTO.sortByAmountDescending( eligibleChequeList);
 		
 	}
 
 	
 
 	
-	public void sortByAmountAscending(List<Cheque> allCheques) {
+	public void sortByAmountAscending() {
 		// TODO Auto-generated method stub
-		chequeDTO.sortByAmountAscending(allCheques);
+		chequeDTO.sortByAmountAscending( eligibleChequeList);
 	}
 
 	@Override
-	public void sortByPriorityAndStatus(List<Cheque> allCheques) {
+	public void sortByPriorityAndStatus() {
 		// TODO Auto-generated method stub
-		chequeDTO.sortByPriorityAndStatus(allCheques);
+		chequeDTO.sortByPriorityAndStatus( eligibleChequeList);
 		
 	}
 
 	@Override
-	public void checkProcessingReports(List<Cheque> cheque) {
+	public void checkProcessingReports() {
 		// TODO Auto-generated method stub
-		chequeDTO.checkProcessingReports(cheque);
+		chequeDTO.checkProcessingReports( eligibleChequeList);
 		
 	}
 
@@ -224,10 +238,10 @@ public class ChequeServiceImpl implements ChequeService {
 
 	    if (accountNumber == null || accountNumber.trim().isEmpty()) {
 	        return false;
-	    }
+	        }
 
 	    for (Cheque cheque : chequeDTO.getAllCheques()) {
-            if (cheque.getAccountNumber().equals(accountNumber)) {
+        if (accountNumber.equals(cheque.getAccountNumber())) {
 	            return true;
 	        }
 	    }

@@ -1,4 +1,4 @@
-package com.iispl.dto;
+package com.iispl.dao;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -14,6 +14,8 @@ import com.iispl.connectionpool.ConnectionPool;
 import com.iispl.enums.ChequePriority;
 import com.iispl.enums.ChequeStatus;
 import com.iispl.exception.AccountNotFoundException;
+import com.iispl.exception.DuplicateChequeNumberException;
+import com.iispl.exception.InvalidPresentingBankException;
 import com.iispl.model.Cheque;
 import com.iispl.services.ChequeServiceImpl;
 
@@ -26,19 +28,22 @@ public class ChequedaoIMPL implements ChequeDAO {
 	Scanner input=new Scanner(System.in);
 
     @Override
-    public List<Cheque> getAllCheques() {
+    public List<Cheque> getAllCheques() throws DuplicateChequeNumberException {
 
         List<Cheque> chequeList = new ArrayList<>();
 
         try (Connection connection = ConnectionPool.getDataSource().getConnection();
-             PreparedStatement preparedStatement =
-                     connection.prepareStatement("SELECT * FROM cheque");
+             PreparedStatement preparedStatement =connection.prepareStatement("SELECT * FROM cheque");
              ResultSet resultSet = preparedStatement.executeQuery()) {
         	connection.setAutoCommit(false);
             while (resultSet.next()) {
 
+            	
+            	
                 Cheque cheque = new Cheque();
-
+                if (isChequeNumberExists(cheque.getChequeNumber())) {
+                    throw new DuplicateChequeNumberException("Duplicate Cheque Number: " + cheque.getChequeNumber());
+                }
                 cheque.setChequeNumber(resultSet.getString("cheque_number"));
                 cheque.setAccountNumber(resultSet.getString("account_number"));
                 cheque.setDrawerName(resultSet.getString("drawer_name"));
@@ -47,13 +52,9 @@ public class ChequedaoIMPL implements ChequeDAO {
                 cheque.setChequeDate(resultSet.getDate("cheque_date").toLocalDate());
                 cheque.setPresentedDate(resultSet.getDate("presented_date").toLocalDate());
 
-                cheque.setPriority(
-                        ChequePriority.valueOf(
-                                resultSet.getString("priority").trim().toUpperCase()));
+                cheque.setPriority(ChequePriority.valueOf(resultSet.getString("priority").trim().toUpperCase()));
 
-                cheque.setStatus(
-                        ChequeStatus.valueOf(
-                                resultSet.getString("status").trim().toUpperCase()));
+                cheque.setStatus(ChequeStatus.valueOf(resultSet.getString("status").trim().toUpperCase()));
 
                 chequeList.add(cheque);
                 
@@ -112,11 +113,10 @@ public class ChequedaoIMPL implements ChequeDAO {
     }
 
     @Override
-    public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) {
-
-        chequeList.sort(
-                Comparator.comparing(Cheque::getPresentingBank)
-                          .thenComparing(Cheque::getChequeAmount));
+    public void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList) throws InvalidPresentingBankException  {
+    	
+    	
+        chequeList.sort(Comparator.comparing(Cheque::getPresentingBank).thenComparing(Cheque::getChequeAmount));
 
         System.out.printf(
                 "%-15s %-15s %-20s %-20s %-15s %-15s %-15s %-12s %-12s%n",
@@ -171,8 +171,7 @@ public class ChequedaoIMPL implements ChequeDAO {
     @Override
     public void sortByAmountDescending(List<Cheque> allCheques) {
 
-        allCheques.sort(
-                Comparator.comparing(Cheque::getChequeAmount).reversed());
+        allCheques.sort(Comparator.comparing(Cheque::getChequeAmount).reversed());
 
         allCheques.forEach(System.out::println);
     }
@@ -180,9 +179,7 @@ public class ChequedaoIMPL implements ChequeDAO {
     @Override
     public void sortByAmountAscending(List<Cheque> allCheques) {
 
-        Collections.sort(
-                allCheques,
-                Comparator.comparing(Cheque::getChequeAmount));
+        Collections.sort(allCheques,Comparator.comparing(Cheque::getChequeAmount));
 
         allCheques.forEach(System.out::println);
     }
@@ -190,9 +187,7 @@ public class ChequedaoIMPL implements ChequeDAO {
     @Override
     public void sortByPriorityAndStatus(List<Cheque> allCheques) {
 
-        allCheques.sort(
-                Comparator.comparing(Cheque::getPriority)
-                          .thenComparing(Cheque::getStatus));
+        allCheques.sort(Comparator.comparing(Cheque::getPriority).thenComparing(Cheque::getStatus));
 
         allCheques.forEach(System.out::println);
     }
@@ -235,12 +230,11 @@ public class ChequedaoIMPL implements ChequeDAO {
                 totalAmount = totalAmount.add(cheque.getChequeAmount());
 
                 if (cheque.getChequeAmount().compareTo(maxChequeAmount) > 0) {
-                    maxChequeAmount = cheque.getChequeAmount();
+                  maxChequeAmount = cheque.getChequeAmount();
                 }
 
-                if (minChequeAmount == null
-                        || cheque.getChequeAmount().compareTo(minChequeAmount) < 0) {
-                    minChequeAmount = cheque.getChequeAmount();
+                if (minChequeAmount == null|| cheque.getChequeAmount().compareTo(minChequeAmount) < 0) {
+              minChequeAmount = cheque.getChequeAmount();
                 }
             }
             
@@ -366,41 +360,39 @@ public class ChequedaoIMPL implements ChequeDAO {
     @Override
     public void checkProcessingReports(List<Cheque> cheques) {
 
-       System.out.println("1.Cheques REPORTS FOR THE ACCEPTED CHEQUES\n 2.REJECTED CHEQUES PROCESSING REPOERT\n 3.CUSTOMER PROCESING REPORTS");
-       
-       int op=input.nextInt();
-       switch(op) {
-       case 1:
-    	   acceptedValuesChequesReport(cheques);
-    	   
-    	   break;
-       case 2:
-    	   rejectedValuesChequesReport(cheques);
-    	   break;
-    	   
-       case 3:
-    	   
-    	   
-    	   try {
-    		   System.out.println("Enter the Account Number:");
-        	   String accountNumber=input.next();
-        	   customerChequeProcessingReports(cheques,accountNumber);
+    	System.out.println("\n========== CHEQUE PROCESSING REPORTS ==========");
+    	System.out.println("1. Accepted Cheques Report");
+    	System.out.println("2. Rejected Cheques Report");
+    	System.out.println("3. Customer Cheque Processing Report");
+    	System.out.print("Enter your choice : ");
 
-    	   }
-    	   catch(AccountNotFoundException e) {
-    		   e.getMessage();
-    	   }
-    	   
-    	   break;
-    	   
-    	   
+    	int option = input.nextInt();
+
+    	switch (option) {
+
+    	case 1:
+    	    acceptedValuesChequesReport(cheques);
+    	    break;
+
+    	case 2:
+    	    rejectedValuesChequesReport(cheques);
+    	    break;
+
+    	case 3:
+    	    try {
+    	        System.out.print("Enter Account Number : ");
+    	        String accountNumber = input.next();
+
+    	        customerChequeProcessingReports(cheques, accountNumber);
+
+    	    } catch (AccountNotFoundException e) {
+    	        System.out.println(e.getMessage());
+    	    }
+    	    break;
+
     	default:
-    		System.out.println("Invalid Option");
-    	   
-       }
+    	    System.out.println("Invalid Choice! Please select a valid option.");
+    	}
+		
     }
-		
-		
-		
-	
 }
