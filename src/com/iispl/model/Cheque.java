@@ -16,6 +16,7 @@ public class Cheque implements Comparable<Cheque>{
     private LocalDate chequeDate;
     private LocalDate presentedDate;
     private ChequePriority priority;
+    
     private ChequeStatus status;
     private String clearingZone;
 
