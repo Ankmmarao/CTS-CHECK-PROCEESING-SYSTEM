@@ -28,4 +28,6 @@ public interface ChequeDAO {
 	boolean isChequeNumberExists(String chequeNumber);
 
 	void checkProcessingReports(List<Cheque> cheque);
+
+	void sortByClearingZoneAndAmount(List<Cheque> eligibleChequeList);
 }

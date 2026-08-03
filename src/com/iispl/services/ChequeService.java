@@ -27,7 +27,8 @@ public interface ChequeService {
         void sortByPriorityAndStatus();
 
         void checkProcessingReports();
-    
+        
+        void sortByClearingZoneAndAmount();
 
     /*void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList);
 
