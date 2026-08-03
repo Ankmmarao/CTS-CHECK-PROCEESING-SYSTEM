@@ -50,6 +50,7 @@ public class ChequeServiceImpl implements ChequeService {
         List<Cheque> chequeList = chequeDTO.getAllCheques();
 
         for (Cheque cheque : chequeList) {
+        	if(cheque.getDrawerName()!=null)
             System.out.println(cheque);
         }
     }
