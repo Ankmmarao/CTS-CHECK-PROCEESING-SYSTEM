@@ -17,28 +17,29 @@ public class Cheque implements Comparable<Cheque>{
     private LocalDate presentedDate;
     private ChequePriority priority;
     private ChequeStatus status;
+    private String clearingZone;
 
     
-    public Cheque(String chequeNumber, String accountNumber, String drawerName, String presentingBank, BigDecimal chequeAmount,LocalDate chequeDate, LocalDate presentedDate,
-                  ChequePriority priority, ChequeStatus status) {
-
-        this.chequeNumber = chequeNumber;
-        this.accountNumber = accountNumber;
-        this.drawerName = drawerName;
-        this.presentingBank = presentingBank;
-        this.chequeAmount = chequeAmount;
-        this.chequeDate = chequeDate;
-        this.presentedDate = presentedDate;
-        this.priority = priority;
-        this.status = status;
-    }
-
-  
-
-    public String getChequeNumber() {
-		return chequeNumber;
+	public Cheque(String chequeNumber, String accountNumber, String drawerName, String presentingBank,
+			BigDecimal chequeAmount, LocalDate chequeDate, LocalDate presentedDate, ChequePriority priority,
+			ChequeStatus status, String clearingZone) {
+		super();
+		this.chequeNumber = chequeNumber;
+		this.accountNumber = accountNumber;
+		this.drawerName = drawerName;
+		this.presentingBank = presentingBank;
+		this.chequeAmount = chequeAmount;
+		this.chequeDate = chequeDate;
+		this.presentedDate = presentedDate;
+		this.priority = priority;
+		this.status = status;
+		this.clearingZone = clearingZone;
 	}
 
+
+	public String getChequeNumber() {
+		return chequeNumber;
+	}
 
 
 	public void setChequeNumber(String chequeNumber) {
@@ -46,11 +47,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public String getAccountNumber() {
 		return accountNumber;
 	}
-
 
 
 	public void setAccountNumber(String accountNumber) {
@@ -58,11 +57,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public String getDrawerName() {
 		return drawerName;
 	}
-
 
 
 	public void setDrawerName(String drawerName) {
@@ -70,11 +67,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public String getPresentingBank() {
 		return presentingBank;
 	}
-
 
 
 	public void setPresentingBank(String presentingBank) {
@@ -82,11 +77,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public BigDecimal getChequeAmount() {
 		return chequeAmount;
 	}
-
 
 
 	public void setChequeAmount(BigDecimal chequeAmount) {
@@ -94,11 +87,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public LocalDate getChequeDate() {
 		return chequeDate;
 	}
-
 
 
 	public void setChequeDate(LocalDate chequeDate) {
@@ -106,11 +97,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public LocalDate getPresentedDate() {
 		return presentedDate;
 	}
-
 
 
 	public void setPresentedDate(LocalDate presentedDate) {
@@ -118,11 +107,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public ChequePriority getPriority() {
 		return priority;
 	}
-
 
 
 	public void setPriority(ChequePriority priority) {
@@ -130,11 +117,9 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
 	public ChequeStatus getStatus() {
 		return status;
 	}
-
 
 
 	public void setStatus(ChequeStatus status) {
@@ -142,28 +127,23 @@ public class Cheque implements Comparable<Cheque>{
 	}
 
 
-
-	public Cheque() {
-		
+	@Override
+	public String toString() {
+		return "Cheque [chequeNumber=" + chequeNumber + ", accountNumber=" + accountNumber + ", drawerName="
+				+ drawerName + ", presentingBank=" + presentingBank + ", chequeAmount=" + chequeAmount + ", chequeDate="
+				+ chequeDate + ", presentedDate=" + presentedDate + ", priority=" + priority + ", status=" + status
+				+ ", clearingZone=" + clearingZone + "]";
 	}
 
 
+	public String getClearingZone() {
+		return clearingZone;
+	}
 
-    @Override
-    public String toString() {
 
-        return String.format(
-                "| %-12s | %-15s | %-20s | %-20s | %-12s | %-12s | %-15s | %-8s | %-10s |",
-                chequeNumber,
-                accountNumber,
-                drawerName,
-                presentingBank,
-                chequeAmount,
-                chequeDate,
-                presentedDate,
-                priority,
-                status);
-    }
+	public void setClearingZone(String clearingZone) {
+		this.clearingZone = clearingZone;
+	}
 
 
 	@Override
