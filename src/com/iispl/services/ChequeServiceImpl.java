@@ -71,6 +71,7 @@ public class ChequeServiceImpl implements ChequeService {
         validations.add(new PresentedDateValidation());
         validations.add(new PresentingBankValidation());
         validations.add(new AccountFieldsValidation());
+        
         validations.add(new PriorityValidation());
         validations.add(new StatusValidation());
         validations.add(new ClearingZoneValidation());
