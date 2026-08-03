@@ -31,8 +31,9 @@ public class ChequeProcessingApplication {
             System.out.println("7. Sort By Amount Ascending");
             System.out.println("8. Sort By Amount Descending");
             System.out.println("9. Sort By Priority And Status");
+            System.out.println("10.sortByClearingZoneAndAmount");
             System.out.println("11. Report");
-            System.out.println("10. Exit");
+            System.out.println("12. Exit");
             System.out.print("Enter your choice : ");
 
             int choice = scanner.nextInt();
@@ -82,7 +83,7 @@ public class ChequeProcessingApplication {
                 break;
 
             case 10:
-                chequeService.sortByClearingZoneAndAmount(chequeList);
+                chequeService.sortByClearingZoneAndAmount();
                 break;
                 
             case 11:

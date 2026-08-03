@@ -20,9 +20,7 @@ public class Cheque implements Comparable<Cheque>{
     private String clearingZone;
 
     
-	public Cheque(String chequeNumber, String accountNumber, String drawerName, String presentingBank,
-			BigDecimal chequeAmount, LocalDate chequeDate, LocalDate presentedDate, ChequePriority priority,
-			ChequeStatus status, String clearingZone) {
+	public Cheque() {
 		super();
 		this.chequeNumber = chequeNumber;
 		this.accountNumber = accountNumber;

@@ -40,28 +40,42 @@ public class ChequedaoIMPL implements ChequeDAO {
 
             	
             	
-                Cheque cheque = new Cheque(null, null, null, null, null, null, null, null, null, null);
-                if (isChequeNumberExists(cheque.getChequeNumber())) {
-                    throw new DuplicateChequeNumberException("Duplicate Cheque Number: " + cheque.getChequeNumber());
-                }
-                cheque.setChequeNumber(resultSet.getString("cheque_number"));
-                cheque.setAccountNumber(resultSet.getString("account_number"));
-                cheque.setDrawerName(resultSet.getString("drawer_name"));
-                cheque.setPresentingBank(resultSet.getString("presenting_bank"));
-                cheque.setChequeAmount(resultSet.getBigDecimal("cheque_amount"));
-                cheque.setChequeDate(resultSet.getDate("cheque_date").toLocalDate());
-                cheque.setPresentedDate(resultSet.getDate("presented_date").toLocalDate());
+            	Cheque cheque = new Cheque();
 
-                cheque.setPriority(ChequePriority.valueOf(resultSet.getString("priority").trim().toUpperCase()));
+            	cheque.setChequeNumber(resultSet.getString("cheque_number"));
 
-                cheque.setStatus(ChequeStatus.valueOf(resultSet.getString("status").trim().toUpperCase()));
-                cheque.setClearingZone(
-                	    resultSet.getString("clearing_zone_name")
-                	);
+            	if (isChequeNumberExists(cheque.getChequeNumber())) {
+            	    throw new DuplicateChequeNumberException(
+            	        "Duplicate Cheque Number: " + cheque.getChequeNumber()
+            	    );
+            	}
 
-                chequeList.add(cheque);
-                
-                
+            	cheque.setAccountNumber(resultSet.getString("account_number"));
+            	cheque.setDrawerName(resultSet.getString("drawer_name"));
+            	cheque.setPresentingBank(resultSet.getString("presenting_bank"));
+            	cheque.setChequeAmount(resultSet.getBigDecimal("cheque_amount"));
+
+            	if (resultSet.getDate("cheque_date") != null) {
+            	    cheque.setChequeDate(resultSet.getDate("cheque_date").toLocalDate());
+            	}
+
+            	if (resultSet.getDate("presented_date") != null) {
+            	    cheque.setPresentedDate(resultSet.getDate("presented_date").toLocalDate());
+            	}
+
+            	String priority = resultSet.getString("priority");
+            	if (priority != null) {
+            	    cheque.setPriority(ChequePriority.valueOf(priority.trim().toUpperCase()));
+            	}
+
+            	String status = resultSet.getString("status");
+            	if (status != null) {
+            	    cheque.setStatus(ChequeStatus.valueOf(status.trim().toUpperCase()));
+            	}
+
+            	cheque.setClearingZone(resultSet.getString("clearingzone"));
+
+            	chequeList.add(cheque);
             }
 
         } catch (Exception e) {
@@ -104,8 +118,20 @@ public class ChequedaoIMPL implements ChequeDAO {
              PreparedStatement preparedStatement =
                      connection.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, cheque.getStatus().name());
-            preparedStatement.setString(2, cheque.getPriority().name());
+            // Status
+            if (cheque.getStatus() != null) {
+                preparedStatement.setString(1, cheque.getStatus().name());
+            } else {
+                preparedStatement.setNull(1, java.sql.Types.VARCHAR);
+            }
+
+            // Priority
+            if (cheque.getPriority() != null) {
+                preparedStatement.setString(2, cheque.getPriority().name());
+            } else {
+                preparedStatement.setNull(2, java.sql.Types.VARCHAR);
+            }
+
             preparedStatement.setString(3, cheque.getChequeNumber());
 
             preparedStatement.executeUpdate();
@@ -399,18 +425,22 @@ public class ChequedaoIMPL implements ChequeDAO {
 		
     }
 
-	@Override
-	public void sortByClearingZoneAndAmountComparator(List<Cheque> allCheques) {
-		// TODO Auto-generated method stub
-		        allCheques.sort(Comparator.comparing(Cheque::getClearingZone)
-		                  .thenComparing(Comparator.comparing(Cheque::getChequeAmount)
-		                                           .reversed()));
-		        
-		        allCheques.forEach(System.out::println);
+    @Override
+    public void sortByClearingZoneAndAmountComparator(List<Cheque> allCheques) {
 
+        allCheques.sort(
+            Comparator.comparing(
+                    Cheque::getClearingZone,
+                    Comparator.nullsLast(String::compareTo)
+            )
+            .thenComparing(
+                    Cheque::getChequeAmount,
+                    Comparator.nullsLast(Comparator.reverseOrder())
+            )
+        );
 
-		
-	}
+        allCheques.forEach(System.out::println);
+    }
 
 	
 }

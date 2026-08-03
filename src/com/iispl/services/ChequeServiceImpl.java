@@ -255,7 +255,7 @@ public class ChequeServiceImpl implements ChequeService {
 	    return false;
 	}
 	@Override
-	public void sortByClearingZoneAndAmount(List<Cheque> eligibleChequeList) {
+	public void sortByClearingZoneAndAmount() {
 		chequeDTO.sortByClearingZoneAndAmountComparator(eligibleChequeList);
 		
 	}

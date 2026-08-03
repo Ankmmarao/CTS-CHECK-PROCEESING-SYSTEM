@@ -28,7 +28,7 @@ public interface ChequeService {
 
         void checkProcessingReports();
     
-        void sortByClearingZoneAndAmount(List<Cheque> eligibleChequeList);
+        void sortByClearingZoneAndAmount();
     /*void sortByChequeByPresentingBankAndAmount(List<Cheque> chequeList);
 
 	void sortChequeByDate(List<Cheque> allCheques);
